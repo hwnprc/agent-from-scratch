@@ -1,0 +1,10 @@
+
+fruits = ["apple", "banana", "orange"]
+
+for i in range(len(fruits)):
+    print(i, fruits[i])
+    
+for i, fruit in enumerate(fruits):
+    print(i, fruit) 
+
+   
