@@ -6,21 +6,22 @@ def llm_router_call(user_prompt: str) -> str:
     router_prompt = f"""
     User Question: {user_prompt}
     
-    위 질문에 대해 가장 적절한 유형을 하나 골라
-    - 일상: 일반적인 대화, 일정 짜기, 정보 요청 등
-    - 빠른: 계산, 단답형 질문, 간단한 명령 등
-    - 코딩: 파이썬, 코드 작성, 오류 디버깅 등
-    단답형으로 유형만 출력해.
-    """
+    Choose the most appropriate type for the above question.
+        - casual: General conversation, scheduling, information requests, etc.
+        - quick: Calculations, short answers, simple commands, etc.
+        - coding: Python, code writing, debugging errors, etc.
+        
+        Output only the type in a single word.
+        """
     routing_result = llm_call(router_prompt, model="gpt-4o-mini").strip()
     return routing_result
 
 def run_general_agent(user_prompt: str):
     prompt = f"""
-    너는 다재다능한 일상 도우미야. 
-    여행 일정, 추천, 요약 등 일상적인 질문에 친절하고 유용하게 답변하지. 
-    
-    [사용자 질문]
+    You are a versatile daily assistant.
+You answer everyday questions such as travel itineraries, recommendations, summaries, etc. in a friendly and helpful manner.
+
+[User Question]
     {user_prompt}
     """
     
@@ -30,10 +31,10 @@ def run_general_agent(user_prompt: str):
     
 def run_quick_agent(user_prompt: str):
     prompt = f"""
-    너는 빠르고 간단한 응답을 제공하는 빠른 에이전트야.
-    사용자의 질문에 두괄식으로 간결하게 답변하지.
-    
-    [사용자 질문]
+    You are a quick agent that provides fast and simple responses.
+You answer the user's questions concisely in a top-down manner (starting with the main point first).
+
+[User Question]
     {user_prompt}
     """
     response = llm_call(prompt, model="gpt-4o-mini")
@@ -43,11 +44,11 @@ def run_quick_agent(user_prompt: str):
     
 def run_coding_agent(user_prompt: str):
     prompt = f"""
-    너는 뛰어난 코딩 비서야.
-    파이썬, 자바스크립트, API 개발, 오류 디버깅 등에 능숙해.
-    질문에 대해 최대한 정확하게 실행 가능한 코드를 제공하지.
+    You are an excellent coding assistant.
+You are skilled in Python, JavaScript, API development, error debugging, etc.
+You provide executable code as accurately as possible for the question.
 
-    [사용자 질문]
+[User Question]
     {user_prompt}
     """
     
@@ -71,7 +72,7 @@ if __name__ == "__main__":
     
 user_input = st.text_input("User Question")
 
-if st.button("Agent Run") and user_input.strip():
+if st.button("Run Agent") and user_input.strip():
     with st.spinner("Agent is analyzing.."):
         category = llm_router_call(user_input)
         st.markdown(f"🔍 Category Result: `{category}`")

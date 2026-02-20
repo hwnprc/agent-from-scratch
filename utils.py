@@ -1,5 +1,6 @@
 from openai import OpenAI
 from dotenv import load_dotenv
+from openai import AsyncOpenAI, OpenAI
 import os
 
 load_dotenv()
@@ -12,6 +13,7 @@ sync_client = OpenAI(
     api_key = OPENAI_API_KEY,
 )
 
+# LLL call function 
 def llm_call(prompt: str, model: str = "gpt-4o-mini") -> str:
     messages = []
     
@@ -27,6 +29,22 @@ def llm_call(prompt: str, model: str = "gpt-4o-mini") -> str:
         messages = messages,
     )
     return chat_completion.choices[0].message.content
+
+# Creating a Async Client
+async_client = AsyncOpenAI(
+    api_key= OPENAI_API_KEY,
+)
+
+async def llm_call_async(prompt: str, model: str = "gpt-4o-mini") -> str:
+    messages = []
+    messages.append({"role": "user", "content": prompt})
+    chat_completion = await async_client.chat.completions.create(
+        model=model,
+        messages=messages,
+    )
+    print(model,"완료")
+    return chat_completion.choices[0].message.content
+
 
 if __name__ == "__main__":
     test = llm_call("한국의 수도는?")

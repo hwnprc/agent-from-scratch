@@ -11,7 +11,7 @@ def prompt_chain_workflow(initial_input: str, prompt_chain: List[str]) -> List[s
         
         final_prompt = f"""{prompt}
 처음에 사용자가 입력한 내용은 다음과 같아. 응답할 때 항상 이 내용을 고려해.
-{initial_}
+{initial_input}
         
 응답 시 아래 내용을 참고해.
 {response}"""
